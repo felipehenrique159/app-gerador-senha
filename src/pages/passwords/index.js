@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useIsFocused } from '@react-navigation/native'
 import useStorage from '../../hooks/useStorage'
@@ -22,8 +22,25 @@ export function Passwords() {
     }, [focused])
 
     async function handleDeletePassword(item) {
-        let passwords = await removeItem('@pass', item)
-        setListPasswords(passwords)
+        Alert.alert(
+            'Deseja excluir a senha',
+            item,
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {},
+                style: 'cancel',
+              },
+              {
+                text: 'Excluir',
+                onPress: async() => {
+                    let passwords = await removeItem('@pass', item)
+                    setListPasswords(passwords)
+                },
+              },
+            ],
+            { cancelable: false }
+          );
     }
 
     return(
